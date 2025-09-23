@@ -1,98 +1,123 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const router = useRouter();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#007AFF" />
+      
+      <View style={styles.header}>
+        <Text style={styles.logo}>🍻</Text>
+        <Text style={styles.title}>NomiShimei</Text>
+        <Text style={styles.subtitle}>参加者の名前が組み込まれる{'\n'}新感覚飲み会ゲーム</Text>
+      </View>
+
+      <View style={styles.content}>
+        <View style={styles.featureContainer}>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>🎲</Text>
+            <Text style={styles.featureText}>ランダムお題</Text>
+          </View>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>👥</Text>
+            <Text style={styles.featureText}>2-10人対応</Text>
+          </View>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>😂</Text>
+            <Text style={styles.featureText}>爆笑必至</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.startButton}
+          onPress={() => router.push('../player-setup')}
+        >
+          <Text style={styles.startButtonText}>ゲームを始める</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.versionText}>v1.0.0</Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#007AFF',
   },
-  stepContainer: {
-    gap: 8,
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 80,
+  },
+  logo: {
+    fontSize: 80,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.9)',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  content: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 30,
+    paddingTop: 40,
+    paddingBottom: 50,
+  },
+  featureContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 40,
+  },
+  featureItem: {
+    alignItems: 'center',
+  },
+  featureIcon: {
+    fontSize: 32,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  featureText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
+  startButton: {
+    backgroundColor: '#34C759',
+    paddingVertical: 18,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  startButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  versionText: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#999',
   },
 });

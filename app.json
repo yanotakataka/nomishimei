@@ -1,15 +1,17 @@
 {
   "expo": {
-    "name": "nomishimei",
+    "name": "NomiShimei",
     "slug": "nomishimei",
     "version": "1.0.0",
     "orientation": "portrait",
+    "description": "参加者の名前がお題に組み込まれる、新感覚の飲み会ゲームアプリ",
     "icon": "./assets/images/icon.png",
     "scheme": "nomishimei",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nomishimei.app"
     },
     "android": {
       "adaptiveIcon": {
