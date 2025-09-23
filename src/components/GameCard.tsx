@@ -10,13 +10,30 @@ interface GameCardProps {
 
 export default function GameCard({ isFlipped, cardText, onFlip, turnNumber }: GameCardProps) {
   const flipAnimation = useRef(new Animated.Value(0)).current;
+  const [showBackContent, setShowBackContent] = React.useState(false);
 
   React.useEffect(() => {
-    Animated.timing(flipAnimation, {
-      toValue: isFlipped ? 1 : 0,
-      duration: 600,
-      useNativeDriver: true,
-    }).start();
+    if (isFlipped) {
+      // Start animation, then show back content at the halfway point
+      Animated.timing(flipAnimation, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }).start();
+      
+      // Show back content after half the animation duration
+      setTimeout(() => {
+        setShowBackContent(true);
+      }, 300);
+    } else {
+      // Hide back content immediately, then animate back
+      setShowBackContent(false);
+      Animated.timing(flipAnimation, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      }).start();
+    }
   }, [isFlipped, flipAnimation]);
 
   const frontInterpolate = flipAnimation.interpolate({
@@ -58,7 +75,7 @@ export default function GameCard({ isFlipped, cardText, onFlip, turnNumber }: Ga
             },
           ]}
         >
-          <Text style={styles.cardText}>{cardText}</Text>
+          {showBackContent && <Text style={styles.cardText}>{cardText}</Text>}
         </Animated.View>
 
         {/* Card Front (Initial state) */}
@@ -73,7 +90,7 @@ export default function GameCard({ isFlipped, cardText, onFlip, turnNumber }: Ga
           ]}
         >
           <View style={styles.cardFrontContent}>
-            <Text style={styles.turnNumber}>Turn {turnNumber}</Text>
+            <Text style={styles.turnNumber}>ターン {turnNumber}</Text>
             <Text style={styles.flipInstruction}>タップして{'\n'}カードをめくる</Text>
             <View style={styles.cardDesign}>
               <View style={styles.designCircle} />

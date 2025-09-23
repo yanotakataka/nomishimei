@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { gameCategories } from '../src/data/categories';
 import CategoryCard from '../src/components/CategoryCard';
 
@@ -17,7 +17,7 @@ export default function CategorySelectScreen() {
   const handleComingSoonPress = (categoryId: string) => {
     const category = gameCategories.find(c => c.id === categoryId);
     Alert.alert(
-      'Coming Soon!',
+      '近日公開！',
       `「${category?.name}」カテゴリは今後のアップデートで追加予定です。お楽しみに！`,
       [{ text: 'OK', style: 'default' }]
     );
@@ -37,7 +37,14 @@ export default function CategorySelectScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <>
+      <Stack.Screen 
+        options={{ 
+          title: 'カテゴリ選択',
+          headerBackTitle: 'プレイヤー登録'
+        }} 
+      />
+      <View style={styles.container}>
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.title}>カテゴリを選択</Text>
@@ -80,6 +87,7 @@ export default function CategorySelectScreen() {
         </TouchableOpacity>
       </View>
     </View>
+    </>
   );
 }
 

@@ -74,7 +74,7 @@ export default function GameMenuModal({
           <View style={styles.header}>
             <Text style={styles.title}>ゲームメニュー</Text>
             <Text style={styles.gameInfo}>
-              Turn {turnNumber} • {playerCount}人でプレイ中
+              ターン {turnNumber} • {playerCount}人でプレイ中
             </Text>
           </View>
 

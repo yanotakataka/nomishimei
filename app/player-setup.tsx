@@ -11,7 +11,7 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 
 interface Player {
   id: string;
@@ -20,7 +20,26 @@ interface Player {
 
 export default function PlayerSetupScreen() {
   const router = useRouter();
-  const [players, setPlayers] = useState<Player[]>([]);
+  const { players: playersParam } = useLocalSearchParams();
+  
+  // Initialize players from parameter or empty array
+  const initialPlayers = React.useMemo(() => {
+    if (playersParam && typeof playersParam === 'string') {
+      try {
+        const playerNames = JSON.parse(playersParam);
+        return playerNames.map((name: string, index: number) => ({
+          id: `${Date.now()}-${index}`,
+          name: name
+        }));
+      } catch (error) {
+        console.warn('Failed to parse players parameter:', error);
+        return [];
+      }
+    }
+    return [];
+  }, [playersParam]);
+  
+  const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [inputValue, setInputValue] = useState('');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [error, setError] = useState('');
@@ -135,10 +154,17 @@ export default function PlayerSetupScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <>
+      <Stack.Screen 
+        options={{ 
+          title: 'プレイヤー登録',
+          headerBackTitle: 'ホーム'
+        }} 
+      />
+      <KeyboardAvoidingView 
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>プレイヤーを登録</Text>
         <Text style={styles.subtitle}>
@@ -229,6 +255,7 @@ export default function PlayerSetupScreen() {
         </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
+    </>
   );
 }
 

@@ -27,7 +27,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>😂</Text>
-            <Text style={styles.featureText}>爆笑必至</Text>
+            <Text style={styles.featureText}>盛り上がり必至</Text>
           </View>
         </View>
 

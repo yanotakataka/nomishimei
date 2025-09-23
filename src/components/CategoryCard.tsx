@@ -56,7 +56,7 @@ export default function CategoryCard({
 
         {!category.isAvailable && (
           <View style={styles.comingSoonBadge}>
-            <Text style={styles.comingSoonText}>Coming Soon</Text>
+            <Text style={styles.comingSoonText}>近日公開</Text>
           </View>
         )}
 

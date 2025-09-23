@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, StatusBar, BackHandler } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { normalCards } from '../src/data/gameCards';
 import GameCard from '../src/components/GameCard';
 import GameMenuModal from '../src/components/GameMenuModal';
@@ -59,9 +59,22 @@ export default function GameScreen() {
     const selectedPlayers = getRandomPlayers(playerSlots);
     let formattedText = text;
     
+    // Replace each placeholder with the corresponding player name
     selectedPlayers.forEach((player, index) => {
-      formattedText = formattedText.replace(`{プレイヤー${index + 1}}`, player);
+      const placeholder = `{プレイヤー${index + 1}}`;
+      // Use global replace to handle multiple occurrences of the same placeholder
+      formattedText = formattedText.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), player);
     });
+    
+    // Check for any remaining unreplaced placeholders and replace with available players
+    for (let i = 1; i <= Math.max(playerSlots, 10); i++) {
+      const placeholder = `{プレイヤー${i}}`;
+      if (formattedText.includes(placeholder)) {
+        // If we still have unreplaced placeholders, use a random player
+        const randomPlayer = players[Math.floor(Math.random() * players.length)];
+        formattedText = formattedText.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), randomPlayer);
+      }
+    }
     
     return formattedText;
   };
@@ -140,7 +153,7 @@ export default function GameScreen() {
       'プレイヤー登録画面に戻って新しいゲームを開始しますか？',
       [
         { text: 'キャンセル', style: 'cancel' },
-        { text: '新しいゲーム', onPress: () => router.replace('/player-setup') }
+        { text: '新しいゲーム', onPress: () => router.replace(`/player-setup?players=${JSON.stringify(players)}`) }
       ]
     );
   };
@@ -150,7 +163,14 @@ export default function GameScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <>
+      <Stack.Screen 
+        options={{ 
+          title: 'ゲーム',
+          headerShown: false
+        }} 
+      />
+      <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#1a1a1a" />
       
       {/* Header */}
@@ -160,7 +180,7 @@ export default function GameScreen() {
         </TouchableOpacity>
         
         <View style={styles.gameInfo}>
-          <Text style={styles.gameInfoText}>Turn {gameState.turnNumber}</Text>
+          <Text style={styles.gameInfoText}>ターン {gameState.turnNumber}</Text>
           <Text style={styles.playersInfo}>{players.length}人でプレイ中</Text>
         </View>
         
@@ -201,6 +221,7 @@ export default function GameScreen() {
         playerCount={players.length}
       />
     </View>
+    </>
   );
 }
 
