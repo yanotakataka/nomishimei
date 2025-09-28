@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
+import { AdBanner } from '@/components/AdBanner';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -39,6 +40,8 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <Text style={styles.versionText}>v1.0.0</Text>
+        
+        <AdBanner position="bottom" />
       </View>
     </View>
   );
