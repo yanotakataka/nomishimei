@@ -4,6 +4,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { normalCards } from '../src/data/gameCards';
 import GameCard from '../src/components/GameCard';
 import GameMenuModal from '../src/components/GameMenuModal';
+import { AdBanner } from '../components/AdBanner';
 
 interface GameState {
   currentCardIndex: number;
@@ -195,6 +196,9 @@ export default function GameScreen() {
         turnNumber={gameState.turnNumber}
       />
 
+      {/* Ad Banner */}
+      <AdBanner position="bottom" />
+      
       {/* Bottom Controls */}
       <View style={styles.bottomControls}>
         {gameState.showCard && (
